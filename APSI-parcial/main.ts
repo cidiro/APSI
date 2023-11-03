@@ -11,8 +11,8 @@ import deleteCharacter from "./resolvers/deleteCharacter.ts";
 import { load } from "https://deno.land/std@0.204.0/dotenv/mod.ts";
 const env = await load();
 
-const MONGO_URL = "mongodb+srv://ropalop:ñplokmijn@cluster0.jraxv22.mongodb.net/APSI-practica-extra?retryWrites=true&w=majority";
-// env.MONGO_URL || Deno.env.get("MONGO_URL");
+const MONGO_URL = env.MONGO_URL || Deno.env.get("MONGO_URL");
+const PORT = env.PORT || Deno.env.get("PORT") || 3000;
 
 if (!MONGO_URL) {
 	console.log("No mongo URL found");
@@ -30,6 +30,6 @@ if (!MONGO_URL) {
 	.put("/api/tierramedia/personajes/:id", updateCharacter)
 	.delete("/api/tierramedia/personajes/:id", deleteCharacter);
 
-  app.listen(3000, () => {
-	console.log("Server listening on port 3000");
+  app.listen(PORT, () => {
+	console.log("Server listening on port " + PORT);
   });
