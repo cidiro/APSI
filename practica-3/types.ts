@@ -1,10 +1,25 @@
-export type Monument = {
+export type Mortgage = {
+	amount: number;
+	terms: number;
+	terms_remaining: number;
+	client_id: string;
+	manager_id: string;
+};
+
+export type Client = {
 	name: string;
-	description: string;
-	zipcode: number;
-	city_name: string;
-	country_name: string;
-	country_code: string;
-	region_name: string;
-	timezone: string;
+	email: string;
+	phone: number;
+	balance: number;
+	mortgages: string[];
+	id: string;
+	manager_id: string;
+};
+
+export type Manager = {
+	name: string;
+	email: string;
+	phone: string;
+	clients: string[];
+	id: number;
 };
