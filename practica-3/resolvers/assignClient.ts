@@ -11,6 +11,8 @@ const assignClient = async (req: Request, res: Response) => {
 		const { client_id } = req.params;
 		const { manager_id } = req.body;
 
+		console.log(client_id);
+
 		if (!manager_id) {
 			res.status(400).send("Manager id must be provided.");
 			return;
