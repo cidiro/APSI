@@ -2,7 +2,7 @@ import { PetModelType } from "../db/pet.ts";
 import { Pet } from "../types.ts";
 
 
-export const getPetFromModel = (
+const getPetFromModel = (
   pet: PetModelType
 ): Pet => {
   const { _id, name, breed } = pet;
@@ -13,3 +13,5 @@ export const getPetFromModel = (
     breed,
   };
 };
+
+export default getPetFromModel;
