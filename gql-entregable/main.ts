@@ -1,17 +1,20 @@
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import { GraphQLError } from "graphql";
+import mongoose from "mongoose";
+import { getPetFromModel } from "./controllers/getPetFromModel.ts";
+import { PetModel } from "./db/pet.ts";
 import { Pet } from "./types.ts";
 
-// Data
 
-let pets: Pet[] = [
-  { id: "1", name: "Pippin", breed: "Setter" },
-  { id: "2", name: "Arwen", breed: "Labrador" },
-  { id: "3", name: "Frodo", breed: "Pointer" },
-  { id: "4", name: "Sam", breed: "Spaniel" },
-  { id: "5", name: "Merry", breed: "Poodle" },
-];
+const MONGO_URL = Deno.env.get("MONGO_URL");
+
+if (!MONGO_URL) {
+  console.log("No mongo URL found");
+  Deno.exit(1);
+}
+
+await mongoose.connect(MONGO_URL);
 
 // The GraphQL schema
 const typeDefs = `#graphql
@@ -26,7 +29,7 @@ const typeDefs = `#graphql
     pet(id: ID!): Pet!
   }
   type Mutation {
-    addPet(id: ID!, name: String!, breed: String!): Pet!
+    addPet(name: String!, breed: String!): Pet!
     deletePet(id: ID!): Pet!
     updatePet(id: ID!, name: String!, breed: String!): Pet!
   }
@@ -36,50 +39,76 @@ const typeDefs = `#graphql
 const resolvers = {
   Query: {
     hello: () => "world",
-    pets: () => pets,
-    pet: (_: unknown, args: { id: string }) => {
-      const pet = pets.find((pet) => pet.id === args.id);
+
+
+    pets: async (): Promise<Pet[]> => {
+        const pets = await PetModel.find({}).exec();
+        return pets.map(getPetFromModel);
+    },
+
+
+    pet: async (_: unknown, args: { id: string }): Promise<Pet> => {
+      const pet = await PetModel.findById(args.id).exec();
       if (!pet) {
         throw new GraphQLError(`No pet found with id ${args.id}`, {
           extensions: { code: "NOT_FOUND" },
         });
       }
-      return pet;
+      return getPetFromModel(pet);
     },
   },
+
+
   Mutation: {
-    addPet: (_: unknown, args: { id: string; name: string; breed: string }) => {
-      const pet = {
-        id: args.id,
-        name: args.name,
-        breed: args.breed,
-      };
-      pets.push(pet);
-      return pet;
-    },
-    deletePet: (_: unknown, args: { id: string }) => {
-      const pet = pets.find((pet) => pet.id === args.id);
-      if (!pet) {
-        throw new GraphQLError(`No pet found with id ${args.id}`, {
-          extensions: { code: "NOT_FOUND" },
-        });
-      }
-      pets = pets.filter((pet) => pet.id !== args.id);
-      return pet;
-    },
-    updatePet: (
+    addPet: async (
       _: unknown,
       args: { id: string; name: string; breed: string }
-    ) => {
-      const pet = pets.find((pet) => pet.id === args.id);
+    ): Promise<Pet> => {
+
+      const petExists = await PetModel.findById(args.id).exec();
+      if (petExists) {
+        throw new GraphQLError(`Pet with id ${args.id} already exists`, {
+          extensions: { code: "ALREADY_EXISTS" },
+        });
+      }
+
+      const pet = new PetModel({
+        name : args.name,
+        breed: args.breed,
+      });
+
+      await pet.save();
+      return getPetFromModel(pet);
+    },
+
+
+    deletePet: async (_: unknown, args: { id: string }): Promise<Pet> => {
+      const pet = await PetModel.findByIdAndDelete(args.id).exec();
       if (!pet) {
         throw new GraphQLError(`No pet found with id ${args.id}`, {
           extensions: { code: "NOT_FOUND" },
         });
       }
-      pet.name = args.name;
-      pet.breed = args.breed;
-      return pet;
+      return getPetFromModel(pet);
+    },
+
+
+    updatePet: async (
+      _: unknown,
+      args: { id: string; name: string; breed: string }
+    ): Promise<Pet> => {
+      const pet = await PetModel.findByIdAndUpdate(
+        args.id,
+        { name: args.name, breed: args.breed },
+        { new: true }
+      ).exec();
+
+      if (!pet) {
+        throw new GraphQLError(`No pet found with id ${args.id}`, {
+          extensions: { code: "NOT_FOUND" },
+        });
+      }
+      return getPetFromModel(pet);
     },
   },
 };
