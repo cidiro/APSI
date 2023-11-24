@@ -7,7 +7,7 @@ import { PetModel } from "./db/pet.ts";
 import { Pet } from "./types.ts";
 
 
-const MONGO_URL = "mongodb+srv://ropalop:ñplokmijn@cluster0.jraxv22.mongodb.net/gql-entregable?retryWrites=true&w=majority" // Deno.env.get("MONGO_URL");
+const MONGO_URL = Deno.env.get("MONGO_URL");
 
 if (!MONGO_URL) {
   console.log("No mongo URL found");
