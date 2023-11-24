@@ -26,12 +26,13 @@ const typeDefs = `#graphql
   type Query {
     hello: String!
     pets: [Pet!]!
+    filterPets(breed: String!): [Pet!]!
     pet(id: ID!): Pet!
   }
   type Mutation {
     addPet(name: String!, breed: String!): Pet!
     deletePet(id: ID!): Pet!
-    updatePet(id: ID!, name: String!, breed: String!): Pet!
+    updatePet(id: ID!, name: String, breed: String): Pet!
   }
 `;
 
@@ -46,6 +47,10 @@ const resolvers = {
         return pets.map(getPetFromModel);
     },
 
+    filterPets: async (_: unknown, args: { breed: string }): Promise<Pet[]> => {
+      const pets = await PetModel.find({ breed: args.breed }).exec();
+      return pets.map(getPetFromModel);
+    },
 
     pet: async (_: unknown, args: { id: string }): Promise<Pet> => {
       const pet = await PetModel.findById(args.id).exec();
