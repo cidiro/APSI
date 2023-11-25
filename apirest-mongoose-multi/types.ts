@@ -2,7 +2,7 @@ export type Teacher = {
   id: string;
   name: string;
   email: string;
-  subjects: Array<Omit<Subject, "teacher">>;
+  subjects: Array<Omit<Subject, "teacher" | "students">>;
 };
 
 export type Subject = {
@@ -18,5 +18,5 @@ export type Student = {
   id: string;
   name: string;
   email: string;
-  subjects: Array<Omit<Subject, "students">>;
+  subjects: Array<Omit<Subject, "teacher" | "students">>;
 };

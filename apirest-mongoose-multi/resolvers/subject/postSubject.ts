@@ -1,9 +1,9 @@
 // @deno-types="npm:@types/express@4"
 import { Request, Response } from "express";
-import { Subject } from "../types.ts";
+import { Subject } from "../../types.ts";
 
-import { SubjectModel, SubjectModelType } from "../db/subject.ts";
-import { getSubjectFromModel } from "../controllers/getSubjectFromModel.ts";
+import { SubjectModel, SubjectModelType } from "../../db/subject.ts";
+import { getSubjectFromModel } from "../../controllers/getSubjectFromModel.ts";
 
 export const postSubject = async (
   req: Request<{}, {}, SubjectModelType>,

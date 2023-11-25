@@ -4,7 +4,7 @@ import { TeacherModel } from "../db/teacher.ts";
 import { Subject } from "../types.ts";
 
 export const getSubjectFromModel = async (
-  subject: SubjectModelType
+  subject: SubjectModelType,
 ): Promise<Subject> => {
   const { _id, name, year, teacherID, studentsID } = subject;
 

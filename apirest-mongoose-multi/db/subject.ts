@@ -9,27 +9,23 @@ const subjectSchema = new Schema(
   {
     name: { type: String, required: true },
     year: { type: Number, required: true },
-    teacherID: { type: Schema.Types.ObjectId, required: true, ref: "Teacher" },
+    teacherID: { type: Schema.Types.ObjectId, required: false, ref: "Teacher" },
     studentsID: [
-      { type: Schema.Types.ObjectId, required: true, ref: "Student" },
+      { type: Schema.Types.ObjectId, required: false, ref: "Student" },
     ],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-// validate studentsID
+// validate name
 subjectSchema
-  .path("studentsID")
-  .validate(async function (studentsID: mongoose.Types.ObjectId[]) {
-    try {
-      if (studentsID.some((id) => !mongoose.isValidObjectId(id))) return false;
+  .path("name")
+  .validate((name: string) => name.length >= 3 && name.length <= 50);
 
-      const students = await StudentModel.find({ _id: { $in: studentsID } });
-      return students.length === studentsID.length;
-    } catch (_e) {
-      return false;
-    }
-  });
+// validate year
+subjectSchema
+  .path("year")
+  .validate((year: number) => year >= 1 && year <= 4);
 
 // validate teacherID
 subjectSchema
@@ -45,19 +41,29 @@ subjectSchema
     }
   });
 
-// validate year
+// validate studentsID
 subjectSchema
-  .path("year")
-  .validate((year: number) => year >= 1 && year <= 4);
+  .path("studentsID")
+  .validate(async function (studentsID: mongoose.Types.ObjectId[]) {
+    try {
+      if (studentsID.some((id) => !mongoose.isValidObjectId(id))) return false;
 
+      const students = await StudentModel.find({ _id: { $in: studentsID } });
+      return students.length === studentsID.length;
+    } catch (_e) {
+      return false;
+    }
+  });
 
-export type SubjectModelType = mongoose.Document &
-  Omit<Subject, "id" | "teacher" | "students"> & {
+export type SubjectModelType =
+  & mongoose.Document
+  & Omit<Subject, "id" | "teacher" | "students">
+  & {
     teacherID: mongoose.Types.ObjectId;
     studentsID: Array<mongoose.Types.ObjectId>;
   };
 
 export const SubjectModel = mongoose.model<SubjectModelType>(
   "Subject",
-  subjectSchema
+  subjectSchema,
 );
