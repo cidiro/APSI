@@ -1,5 +1,5 @@
 import { GraphQLError } from "graphql";
-import { PetModel } from "../../db/pet.ts";
+import { PetModel } from "../../db/pet/pet.ts";
 import { Pet } from "../../types.ts";
 import getPetFromModel from "../../controllers/getPetFromModel.ts";
 

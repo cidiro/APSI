@@ -1,4 +1,4 @@
-import { PetModelType } from "../db/pet.ts";
+import { PetModelType } from "../db/pet/pet.ts";
 import { Pet } from "../types.ts";
 
 

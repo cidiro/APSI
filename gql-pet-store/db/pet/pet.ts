@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Pet } from "../types.ts";
+import { Pet } from "../../types.ts";
 
 const Schema = mongoose.Schema;
 
