@@ -2,7 +2,7 @@
 import { Request, Response } from "express";
 import { Student } from "../../types.ts";
 
-import { StudentModel, StudentModelType } from "../../db/student.ts";
+import { StudentModel, StudentModelType } from "../../db/student/student.ts";
 import { getStudentFromModel } from "../../controllers/getStudentFromModel.ts";
 
 export const postStudent = async (

@@ -1,7 +1,7 @@
 // @deno-types="npm:@types/express@4"
 import { Request, Response } from "express";
 
-import { StudentModel, StudentModelType } from "../../db/student.ts";
+import { StudentModel, StudentModelType } from "../../db/student/student.ts";
 
 export const deleteStudent = async (
   req: Request<{ id: string }, {}>,

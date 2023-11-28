@@ -9,7 +9,7 @@ export type Subject = {
   id: string;
   name: string;
   year: string;
-  teacher: Omit<Teacher, "subjects">;
+  teacher: Omit<Teacher, "subjects"> | null;
   students: Array<Omit<Student, "subjects">>;
 };
 

@@ -2,7 +2,7 @@
 import { Request, Response } from "express";
 
 import { Student } from "../../types.ts";
-import { StudentModel, StudentModelType } from "../../db/student.ts";
+import { StudentModel, StudentModelType } from "../../db/student/student.ts";
 import { getStudentFromModel } from "../../controllers/getStudentFromModel.ts";
 
 export const putStudent = async (
@@ -15,7 +15,7 @@ export const putStudent = async (
     const student = await StudentModel.findByIdAndUpdate(
       id,
       { name, email, subjectsID },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
 
     if (!student) {

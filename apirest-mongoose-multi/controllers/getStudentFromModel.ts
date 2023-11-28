@@ -1,5 +1,5 @@
-import { StudentModelType } from "../db/student.ts";
-import { SubjectModel } from "../db/subject.ts";
+import { StudentModelType } from "../db/student/student.ts";
+import { SubjectModel } from "../db/subject/subject.ts";
 import { Student } from "../types.ts";
 
 export const getStudentFromModel = async (

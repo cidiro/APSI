@@ -1,5 +1,5 @@
 // @deno-types="npm:@types/express@4"
-import express, { Request, Response } from "express";
+import express from "express";
 import mongoose from "mongoose";
 
 import { postStudent } from "./resolvers/student/postStudent.ts";
@@ -19,7 +19,6 @@ import { putSubject } from "./resolvers/subject/putSubject.ts";
 import { deleteSubject } from "./resolvers/subject/deleteSubject.ts";
 import { getSubjects } from "./resolvers/subject/getSubjects.ts";
 import { getSubject } from "./resolvers/subject/getSubject.ts";
-
 
 const MONGO_URL = Deno.env.get("MONGO_URL");
 

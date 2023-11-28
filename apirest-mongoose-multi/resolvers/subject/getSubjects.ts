@@ -2,7 +2,7 @@
 import { Request, Response } from "express";
 import { Subject } from "../../types.ts";
 
-import { SubjectModel } from "../../db/subject.ts";
+import { SubjectModel } from "../../db/subject/subject.ts";
 import { getSubjectFromModel } from "../../controllers/getSubjectFromModel.ts";
 
 export const getSubjects = async (
