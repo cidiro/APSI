@@ -7,7 +7,8 @@ import mutationResolvers from "./resolvers/mutations/index.ts";
 import typeDefs from "./typeDefs.ts";
 
 
-const MONGO_URL = Deno.env.get("MONGO_URL");
+const MONGO_URL = "mongodb+srv://ropalop:ñplokmijn@cluster0.jraxv22.mongodb.net/APSI-practica-4?retryWrites=true&w=majority"
+// Deno.env.get("MONGO_URL");
 
 if (!MONGO_URL) {
   console.log("No mongo URL found");
