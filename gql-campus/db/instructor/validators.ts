@@ -11,6 +11,19 @@ const coursesExist = async (courseIDs: mongoose.Types.ObjectId[]) => {
   }
 };
 
+// Validate that none of the courses have a instructor assigned
+const coursesHaveNoInstructor = async (
+  courseIDs: mongoose.Types.ObjectId[],
+) => {
+  try {
+    const courses = await CourseModel.find({ _id: { $in: courseIDs } });
+    return !(courses.some((course) => course.instructorID));
+  } catch (_e) {
+    return false;
+  }
+};
+
 export const validators = {
   coursesExist,
+  coursesHaveNoInstructor,
 };

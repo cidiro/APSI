@@ -6,8 +6,8 @@ import { studentPostDelete, studentPostSave, studentPostUpdate } from "./middlew
 
 export type StudentModelType =
   & mongoose.Document
-  & Omit<Student, "id" | "subjects">
-  & { subjectsID: Array<mongoose.Types.ObjectId> };
+  & Omit<Student, "id" | "courses">
+  & { courseIDs: Array<mongoose.Types.ObjectId> };
 
 const Schema = mongoose.Schema;
 
@@ -15,8 +15,10 @@ const studentSchema = new Schema(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    subjectsID: [
-      { type: Schema.Types.ObjectId, required: false, ref: "Subject" },
+    major: { type: String, required: true },
+    year: { type: Number, required: true },
+    courseIDs: [
+      { type: Schema.Types.ObjectId, required: false, ref: "Course" },
     ],
   },
   { timestamps: true },
@@ -32,14 +34,24 @@ studentSchema.path("email").validate(
   "Invalid email",
 );
 
-studentSchema.path("subjectsID").validate(
-  globalValidators.idsAreValid,
-  "Invalid subject IDs",
+studentSchema.path("major").validate(
+  globalValidators.majorIsValid,
+  "Major must be between 3 and 50 characters",
 );
 
-studentSchema.path("subjectsID").validate(
-  validators.subjectsExist,
-  "Some subjects don't exist in the database",
+studentSchema.path("year").validate(
+  globalValidators.yearIsValid,
+  "Enrollment year must be between 1 and 5",
+);
+
+studentSchema.path("courseIDs").validate(
+  globalValidators.idsAreValid,
+  "Invalid course IDs",
+);
+
+studentSchema.path("courseIDs").validate(
+  validators.coursesExist,
+  "Some courses don't exist in the database",
 );
 
 // on save: update related documents

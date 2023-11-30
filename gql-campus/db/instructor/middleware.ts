@@ -1,12 +1,12 @@
-import { StudentModelType } from "./student.ts";
+import { InstructorModelType } from "./instructor.ts";
 import { CourseModel } from "../course/course.ts";
 
-export const studentPostSave = async function (doc: StudentModelType) {
+export const instructorPostSave = async function (doc: InstructorModelType) {
   if (doc.courseIDs.length) {
     try {
       await CourseModel.updateMany(
         { _id: { $in: doc.courseIDs } },
-        { $push: { studentIDs: doc._id } },
+        { instructorID: doc._id },
       );
     } catch (_e) {
       console.log(_e);
@@ -14,10 +14,10 @@ export const studentPostSave = async function (doc: StudentModelType) {
   }
 };
 
-export const studentPostUpdate = async function (doc: StudentModelType) {
+export const instructorPostUpdate = async function (doc: InstructorModelType) {
   try {
     const oldCourses = await CourseModel.find({
-      studentIDs: { $elemMatch: { $eq: doc._id } },
+      instructorID: doc._id,
     });
     const oldCoursesID = oldCourses.map((course) => course._id);
 
@@ -30,23 +30,23 @@ export const studentPostUpdate = async function (doc: StudentModelType) {
 
     await CourseModel.updateMany(
       { _id: { $in: courseIDsRemoved } },
-      { $pull: { studentIDs: doc._id } },
+      { instructorID: null },
     );
     await CourseModel.updateMany(
       { _id: { $in: courseIDsAdded } },
-      { $push: { studentIDs: doc._id } },
+      { instructorID: doc._id },
     );
   } catch (_e) {
     console.log(_e);
   }
-};
+}
 
-export const studentPostDelete = async function (doc: StudentModelType) {
+export const instructorPostDelete = async function (doc: InstructorModelType) {
   if (doc.courseIDs.length) {
     try {
       await CourseModel.updateMany(
         { _id: { $in: doc.courseIDs } },
-        { $pull: { studentIDs: doc._id } },
+        { instructorID: null },
       );
     } catch (_e) {
       console.log(_e);

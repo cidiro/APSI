@@ -1,22 +1,24 @@
 import { StudentModelType } from "../db/student/student.ts";
-import { SubjectModel } from "../db/subject/subject.ts";
+import { CourseModel } from "../db/course/course.ts";
 import { Student } from "../types.ts";
 
 export const getStudentFromModel = async (
   student: StudentModelType,
 ): Promise<Student> => {
-  const { _id, name, email, subjectsID } = student;
+  const { _id, name, email, major, year, courseIDs } = student;
 
-  const subjects = await SubjectModel.find({ _id: { $in: subjectsID } });
+  const courses = await CourseModel.find({ _id: { $in: courseIDs } });
 
   return {
     id: _id.toString(),
     name,
     email,
-    subjects: subjects.map((student) => ({
+    major,
+    year,
+    courses: courses.map((student) => ({
       id: student._id.toString(),
       name: student.name,
-      year: student.year,
+      credits: student.credits,
     })),
   };
 };
