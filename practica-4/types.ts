@@ -1,23 +1,28 @@
-export type Student = {
+export type Business = {
   id: string;
   name: string;
-  email: string;
-  major: string;
-  year: number;
-  courses: Array<Omit<Course, "instructor" | "students">>;
+  workers: Array<Omit<Worker, "business" | "tasks">>;
+  tasks: Array<Omit<Task, "worker" | "business">>;
 };
 
-export type Instructor = {
+export type Task = {
   id: string;
   name: string;
-  officeHours: string;
-  courses: Array<Omit<Course, "instructor" | "students">>;
+  state: State;
+  worker: Omit<Worker, "business" | "tasks"> | null;
+  business: Omit<Business, "workers" | "tasks"> | null;
 };
 
-export type Course = {
+export type Worker = {
   id: string;
   name: string;
-  credits: number;
-  instructor: Omit<Instructor, "courses"> | null;
-  students: Array<Omit<Student, "courses">>;
+  business: Omit<Business, "workers" | "tasks"> | null;
+  tasks: Array<Omit<Task, "worker" | "business">>;
 };
+
+export enum State {
+  TODO = "TO DO",
+  INPROGRESS = "IN PROGRESS",
+  TESTING = "TESTING",
+  CLOSED = "CLOSED",
+}

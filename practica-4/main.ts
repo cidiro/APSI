@@ -1,14 +1,26 @@
-import { ApolloServer } from "@apollo/server";
-import { startStandaloneServer } from "@apollo/server/standalone";
+// @deno-types="npm:@types/express@4"
+import express from "express";
 import mongoose from "mongoose";
 
-import queryResolvers from "./resolvers/queries/index.ts";
-import mutationResolvers from "./resolvers/mutations/index.ts";
-import typeDefs from "./typeDefs.ts";
+import { postWorker } from "./resolvers/worker/postWorker.ts";
+import { putWorker } from "./resolvers/worker/putWorker.ts";
+import { deleteWorker } from "./resolvers/worker/deleteWorker.ts";
+import { getWorkers } from "./resolvers/worker/getWorkers.ts";
+import { getWorker } from "./resolvers/worker/getWorker.ts";
 
+import { postBusiness } from "./resolvers/business/postBusiness.ts";
+import { putBusiness } from "./resolvers/business/putBusiness.ts";
+import { deleteBusiness } from "./resolvers/business/deleteBusiness.ts";
+import { getBusinesses } from "./resolvers/business/getBusinesses.ts";
+import { getBusiness } from "./resolvers/business/getBusiness.ts";
 
-const MONGO_URL = "mongodb+srv://ropalop:ñplokmijn@cluster0.jraxv22.mongodb.net/APSI-practica-4?retryWrites=true&w=majority"
-// Deno.env.get("MONGO_URL");
+import { postTask } from "./resolvers/task/postTask.ts";
+import { putTask } from "./resolvers/task/putTask.ts";
+import { deleteTask } from "./resolvers/task/deleteTask.ts";
+import { getTasks } from "./resolvers/task/getTasks.ts";
+import { getTask } from "./resolvers/task/getTask.ts";
+
+const MONGO_URL = Deno.env.get("MONGO_URL");
 
 if (!MONGO_URL) {
   console.log("No mongo URL found");
@@ -16,14 +28,25 @@ if (!MONGO_URL) {
 }
 
 await mongoose.connect(MONGO_URL);
+const app = express();
+app.use(express.json());
+app
+  .get("/businesses", getBusinesses)
+  .get("/workers", getWorkers)
+  .get("/tasks", getTasks)
+  .get("/business/:id", getBusiness)
+  .get("/worker/:id", getWorker)
+  .get("/task/:id", getTask)
+  .post("/business", postBusiness)
+  .post("/worker", postWorker)
+  .post("/task", postTask)
+  .put("/business/:id", putBusiness)
+  .put("/worker/:id", putWorker)
+  .put("/task/:id", putTask)
+  .delete("/business/:id", deleteBusiness)
+  .delete("/worker/:id", deleteWorker)
+  .delete("/task/:id", deleteTask);
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers: {
-    ...queryResolvers,
-    ...mutationResolvers,
-  },
+app.listen(3000, () => {
+  console.log("Server listening on port 3000");
 });
-
-const { url } = await startStandaloneServer(server);
-console.log(`🚀 Server ready at ${url}`);
