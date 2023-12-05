@@ -69,7 +69,7 @@ businessSchema.post("save", businessPostSave);
 businessSchema.post("findOneAndUpdate", businessPostUpdate);
 
 // on delete: update related documents
-businessSchema.post("deleteOne", businessPostDelete);
+businessSchema.post("findOneAndDelete", businessPostDelete);
 
 export const BusinessModel = mongoose.model<BusinessModelType>(
   "Business",

@@ -17,7 +17,7 @@ const Schema = mongoose.Schema;
 const taskSchema = new Schema(
   {
     name: { type: String, required: true },
-    state: { type: State, required: false, enum: State, default: State.TODO },
+    state: { type: String, required: false, enum: State, default: State.TODO },
     workerID: { type: Schema.Types.ObjectId, required: false, ref: "Worker" },
     businessID: { type: Schema.Types.ObjectId, required: false, ref: "Business" },
   },
@@ -61,7 +61,7 @@ taskSchema.post("save", taskPostSave);
 taskSchema.post("findOneAndUpdate", taskPostUpdate);
 
 // on delete: update related documents
-taskSchema.post("deleteOne", taskPostDelete);
+taskSchema.post("findOneAndDelete", taskPostDelete);
 
 export const TaskModel = mongoose.model<TaskModelType>(
   "Task",

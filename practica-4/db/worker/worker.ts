@@ -62,7 +62,7 @@ workerSchema.post("save", workerPostSave);
 workerSchema.post("findOneAndUpdate", workerPostUpdate);
 
 // on delete: update related documents
-workerSchema.post("deleteOne", workerPostDelete);
+workerSchema.post("findOneAndDelete", workerPostDelete);
 
 export const WorkerModel = mongoose.model<WorkerModelType>(
   "Worker",

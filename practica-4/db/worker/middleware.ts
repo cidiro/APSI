@@ -3,27 +3,25 @@ import { BusinessModel } from "../business/business.ts";
 import { TaskModel } from "../task/task.ts";
 
 export const workerPostSave = async function (doc: WorkerModelType) {
-  if (doc.taskIDs.length) {
-    try {
-      // Update worker ID in related businesses
-      await BusinessModel.updateOne(
-        { _id: doc.businessID },
-        { $push: { workerIDs: doc._id } },
-      );
-      // Update worker ID in related tasks
-      await TaskModel.updateMany(
-        { _id: { $in: doc.taskIDs } },
-        { workerID: doc._id },
-      );
-    } catch (_e) {
-      console.log(_e);
-    }
+  try {
+    // Update workerIDs in related business
+    await BusinessModel.updateOne(
+      { _id: doc.businessID },
+      { $push: { workerIDs: doc._id } },
+    );
+    // Update workerID in related tasks
+    await TaskModel.updateMany(
+      { _id: { $in: doc.taskIDs } },
+      { workerID: doc._id },
+    );
+  } catch (_e) {
+    console.log(_e);
   }
 };
 
 export const workerPostUpdate = async function (doc: WorkerModelType) {
   try {
-    // Update worker ID in related business
+    // businessID got updated: update workerIDs in related business
     const business = await BusinessModel.findOne({
       workerIDs: { $elemMatch: { $eq: doc._id } },
     });
@@ -38,7 +36,7 @@ export const workerPostUpdate = async function (doc: WorkerModelType) {
       );
     }
 
-    // Update worker ID in related tasks
+    // taskIDs got updated: update workerID in related tasks
     const oldTasks = await TaskModel.find({ workerID: doc._id });
     const oldTaskIDs = oldTasks.map((task) => task._id);
 
@@ -63,14 +61,13 @@ export const workerPostUpdate = async function (doc: WorkerModelType) {
 };
 
 export const workerPostDelete = async function (doc: WorkerModelType) {
-  if (doc.taskIDs.length) {
     try {
-      // Update worker ID in related business
+      // Update workerIDs in related business
       await BusinessModel.updateOne(
         { _id: doc.businessID },
         { $pull: { workerIDs: doc._id } },
       );
-      // Update worker ID in related tasks
+      // Update workerID in related tasks
       await TaskModel.updateMany(
         { _id: { $in: doc.taskIDs } },
         { workerID: null },
@@ -78,5 +75,4 @@ export const workerPostDelete = async function (doc: WorkerModelType) {
     } catch (_e) {
       console.log(_e);
     }
-  }
 };
