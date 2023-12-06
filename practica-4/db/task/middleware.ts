@@ -5,12 +5,12 @@ import { BusinessModel } from "../business/business.ts";
 
 export const taskPostSave = async function (doc: TaskModelType) {
   try {
-    // Update task ID in related worker
+    // Update taskIDs in related worker
     await WorkerModel.updateOne(
       { _id: doc.workerID },
       { $push: { taskIDs: doc._id } },
     );
-    // Update task ID in related business
+    // Update taskIDs in related business
     await BusinessModel.updateOne(
       { _id: doc.businessID },
       { $push: { taskIDs: doc._id } },
@@ -22,7 +22,7 @@ export const taskPostSave = async function (doc: TaskModelType) {
 
 export const taskPostUpdate = async function (doc: TaskModelType) {
   try {
-    // Update task ID in related worker
+    // workerID got updated: update taskIDs in related worker
     const worker = await WorkerModel.findOne({
       taskIDs: { $elemMatch: { $eq: doc._id } },
     });
@@ -37,7 +37,7 @@ export const taskPostUpdate = async function (doc: TaskModelType) {
       );
     }
 
-    // Update task ID in related business
+    // businessID got updated: update taskIDs in related business
     const business = await BusinessModel.findOne({
       taskIDs: { $elemMatch: { $eq: doc._id } },
     });
@@ -58,12 +58,12 @@ export const taskPostUpdate = async function (doc: TaskModelType) {
 
 export const taskPostDelete = async function (doc: TaskModelType) {
   try {
-    // Update task ID in related worker
+    // Update taskIDs in related worker
     await WorkerModel.updateOne(
       { _id: doc.workerID },
       { $pull: { taskIDs: doc._id } },
     );
-    // Update task ID in related business
+    // Update taskIDs in related business
     await BusinessModel.updateOne(
       { _id: doc.businessID },
       { $pull: { taskIDs: doc._id } },

@@ -4,12 +4,12 @@ import { WorkerModel } from "../worker/worker.ts";
 
 export const businessPostSave = async function (doc: BusinessModelType) {
   try {
-    // Update business ID in related workers
+    // Update businessID in related workers
     await WorkerModel.updateMany(
       { _id: { $in: doc.workerIDs } },
       { businessID: doc._id },
     );
-    // Update business ID in related tasks
+    // Update businessID in related tasks
     await TaskModel.updateMany(
       { _id: { $in: doc.taskIDs } },
       { businessID: doc._id },
@@ -21,7 +21,7 @@ export const businessPostSave = async function (doc: BusinessModelType) {
 
 export const businessPostUpdate = async function (doc: BusinessModelType) {
   try {
-    // Update business ID in related workers
+    // workerIDs got updated: update businessID in related workers
     const oldWorkers = await WorkerModel.find({
       businessID: doc._id,
     });
@@ -43,7 +43,7 @@ export const businessPostUpdate = async function (doc: BusinessModelType) {
       { businessID: doc._id },
     );
 
-    // Update business ID in related tasks
+    // taskIDs got updated: update businessID in related tasks
     const oldTasks = await TaskModel.find({ businessID: doc._id });
     const oldTaskIDs = oldTasks.map((task) => task._id);
 
@@ -69,12 +69,12 @@ export const businessPostUpdate = async function (doc: BusinessModelType) {
 
 export const businessPostDelete = async function (doc: BusinessModelType) {
   try {
-    // Update business ID in related workers
+    // Update businessID in related workers
     await WorkerModel.updateMany(
       { _id: { $in: doc.workerIDs } },
       { businessID: null },
     );
-    // Update business ID in related tasks
+    // Update businessID in related tasks
     await TaskModel.updateMany(
       { _id: { $in: doc.taskIDs } },
       { businessID: null },
