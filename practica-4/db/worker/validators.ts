@@ -12,6 +12,13 @@ const businessExists = async (businessID: mongoose.Types.ObjectId) => {
   }
 };
 
+// Validate that the worker has no more than 10 tasks
+const tasksAreNoMoreThanTen = (
+  taskIDs: mongoose.Types.ObjectId[],
+) => {
+  return taskIDs.length <= 10;
+};
+
 // Validate that all taskIDs exist in the database
 const tasksExist = async (taskIDs: mongoose.Types.ObjectId[]) => {
   try {
@@ -36,6 +43,7 @@ const tasksHaveNoWorker = async (
 
 export const validators = {
   businessExists,
+  tasksAreNoMoreThanTen,
   tasksExist,
   tasksHaveNoWorker,
 };

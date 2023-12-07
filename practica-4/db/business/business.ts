@@ -33,6 +33,11 @@ businessSchema.path("name").validate(
 );
 
 businessSchema.path("workerIDs").validate(
+  validators.workersAreNoMoreThanTen,
+  "A business can't have more than 10 workers",
+);
+
+businessSchema.path("workerIDs").validate(
   globalValidators.idsAreValid,
   "Invalid worker IDs",
 );

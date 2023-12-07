@@ -1,6 +1,5 @@
 // @deno-types="npm:@types/express@4"
 import { Request, Response } from "express";
-
 import { Business } from "../../types.ts";
 import { BusinessModel, BusinessModelType } from "../../db/business/business.ts";
 import { getBusinessFromModel } from "../../controllers/getBusinessFromModel.ts";

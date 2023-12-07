@@ -41,6 +41,11 @@ workerSchema.path("businessID").validate(
 );
 
 workerSchema.path("taskIDs").validate(
+  validators.tasksAreNoMoreThanTen,
+  "A worker can't have more than 10 tasks",
+);
+
+workerSchema.path("taskIDs").validate(
   globalValidators.idsAreValid,
   "Invalid task IDs",
 );

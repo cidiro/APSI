@@ -2,6 +2,13 @@ import mongoose from "mongoose";
 import { WorkerModel } from "../worker/worker.ts";
 import { TaskModel } from "../task/task.ts";
 
+// Validate that the business has no more than 10 workers
+const workersAreNoMoreThanTen = (
+  workerIDs: mongoose.Types.ObjectId[],
+) => {
+  return workerIDs.length <= 10;
+}
+
 // Validate that all workerIDs exist in the database
 const workersExist = async (workerIDs: mongoose.Types.ObjectId[]) => {
   try {
@@ -47,6 +54,7 @@ const tasksHaveNoBusiness = async (
 };
 
 export const validators = {
+  workersAreNoMoreThanTen,
   workersExist,
   workersHaveNoBusiness,
   tasksExist,

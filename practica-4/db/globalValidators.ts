@@ -5,7 +5,7 @@ import { State } from "../types.ts";
 const nameIsValid = (name: string) => name.length >= 3 && name.length <= 50;
 
 // Validate state
-const stateIsValid = (state: State) => Object.values(State).includes(state);
+const stateIsValid = (state: string) => Object.values(State).includes(state as State);
 
 // Validate year
 const yearIsValid = (year: number) => year >= 1 && year <= 4;

@@ -1,6 +1,5 @@
 // @deno-types="npm:@types/express@4"
 import { Request, Response } from "express";
-
 import { TaskModel } from "../../db/task/task.ts";
 
 export const deleteTask = async (

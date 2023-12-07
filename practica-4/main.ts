@@ -13,12 +13,15 @@ import { putBusiness } from "./resolvers/business/putBusiness.ts";
 import { deleteBusiness } from "./resolvers/business/deleteBusiness.ts";
 import { getBusinesses } from "./resolvers/business/getBusinesses.ts";
 import { getBusiness } from "./resolvers/business/getBusiness.ts";
+import { fireWorker } from "./resolvers/business/fireWorker.ts";
+import { hireWorker } from "./resolvers/business/hireWorker.ts";
 
 import { postTask } from "./resolvers/task/postTask.ts";
 import { putTask } from "./resolvers/task/putTask.ts";
 import { deleteTask } from "./resolvers/task/deleteTask.ts";
 import { getTasks } from "./resolvers/task/getTasks.ts";
 import { getTask } from "./resolvers/task/getTask.ts";
+
 
 const MONGO_URL = Deno.env.get("MONGO_URL");
 
@@ -45,7 +48,9 @@ app
   .put("/task/:id", putTask)
   .delete("/business/:id", deleteBusiness)
   .delete("/worker/:id", deleteWorker)
-  .delete("/task/:id", deleteTask);
+  .delete("/task/:id", deleteTask)
+  .put("/business/:id/fire/:workerID", fireWorker)
+  .put("/business/:id/hire/:workerID", hireWorker);
 
 app.listen(3000, () => {
   console.log("Server listening on port 3000");

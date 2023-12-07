@@ -51,6 +51,12 @@ export const taskPostUpdate = async function (doc: TaskModelType) {
         { $push: { taskIDs: doc._id } },
       );
     }
+
+    // state got updated: check if task is done
+    if (doc.state === "CLOSED") {
+      await taskPostDelete(doc);
+      await doc.deleteOne();
+    }
   } catch (_e) {
     console.log(_e);
   }
