@@ -34,23 +34,23 @@ await mongoose.connect(MONGO_URL);
 const app = express();
 app.use(express.json());
 app
-  .get("/businesses", getBusinesses)
-  .get("/workers", getWorkers)
-  .get("/tasks", getTasks)
-  .get("/business/:id", getBusiness)
+  .get("/worker", getWorkers)
   .get("/worker/:id", getWorker)
-  .get("/task/:id", getTask)
-  .post("/business", postBusiness)
   .post("/worker", postWorker)
-  .post("/task", postTask)
-  .put("/business/:id", putBusiness)
   .put("/worker/:id", putWorker)
-  .put("/task/:id", putTask)
-  .delete("/business/:id", deleteBusiness)
   .delete("/worker/:id", deleteWorker)
-  .delete("/task/:id", deleteTask)
+  .get("/business", getBusinesses)
+  .get("/business/:id", getBusiness)
+  .post("/business", postBusiness)
+  .put("/business/:id", putBusiness)
+  .delete("/business/:id", deleteBusiness)
   .put("/business/:id/fire/:workerID", fireWorker)
-  .put("/business/:id/hire/:workerID", hireWorker);
+  .put("/business/:id/hire/:workerID", hireWorker)
+  .get("/task", getTasks)
+  .get("/task/:id", getTask)
+  .post("/task", postTask)
+  .put("/task/:id", putTask)
+  .delete("/task/:id", deleteTask);
 
 app.listen(3000, () => {
   console.log("Server listening on port 3000");
