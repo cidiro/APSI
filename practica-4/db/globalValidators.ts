@@ -22,6 +22,10 @@ const idIsValid = (id: mongoose.Types.ObjectId) =>
 const idsAreValid = (ids: mongoose.Types.ObjectId[]) =>
   !(ids.some((id) => !mongoose.isValidObjectId(id)));
 
+// Validate that all IDs are unique (not repeated)
+const idsAreUnique = (ids: mongoose.Types.ObjectId[]) =>
+  ids.length === new Set(ids).size;
+
 export const globalValidators = {
   nameIsValid,
   stateIsValid,
@@ -29,4 +33,5 @@ export const globalValidators = {
   emailIsValid,
   idIsValid,
   idsAreValid,
+  idsAreUnique,
 };

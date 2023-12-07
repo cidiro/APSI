@@ -51,6 +51,11 @@ workerSchema.path("taskIDs").validate(
 );
 
 workerSchema.path("taskIDs").validate(
+  globalValidators.idsAreUnique,
+  "Some task IDs are repeated",
+);
+
+workerSchema.path("taskIDs").validate(
   validators.tasksExist,
   "Some tasks don't exist in the database",
 );

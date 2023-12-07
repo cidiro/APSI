@@ -1,12 +1,10 @@
 // @deno-types="npm:@types/express@4"
 import { Request, Response } from "express";
-import { Task } from "../../types.ts";
 import { TaskModel, TaskModelType } from "../../db/task/task.ts";
-import { getTaskFromModel } from "../../controllers/getTaskFromModel.ts";
 
 export const postTask = async (
   req: Request<{}, {}, TaskModelType>,
-  res: Response<Task | { error: unknown }>
+  res: Response<TaskModelType | { error: unknown }>
 ) => {
   try {
     const { name, state, workerID, businessID } = req.body;
@@ -18,9 +16,7 @@ export const postTask = async (
     });
     await task.save();
 
-    const taskResponse: Task = await getTaskFromModel(task);
-
-    res.status(201).json(taskResponse).send();
+    res.status(201).send(task);
   } catch (error) {
     res.status(500).send(error);
   }

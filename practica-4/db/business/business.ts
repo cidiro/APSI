@@ -43,6 +43,11 @@ businessSchema.path("workerIDs").validate(
 );
 
 businessSchema.path("workerIDs").validate(
+  globalValidators.idsAreUnique,
+  "Some worker IDs are repeated",
+);
+
+businessSchema.path("workerIDs").validate(
   validators.workersExist,
   "Some workers don't exist in the database",
 );
@@ -55,6 +60,11 @@ businessSchema.path("workerIDs").validate(
 businessSchema.path("taskIDs").validate(
   globalValidators.idsAreValid,
   "Invalid task IDs",
+);
+
+businessSchema.path("taskIDs").validate(
+  globalValidators.idsAreUnique,
+  "Some task IDs are repeated",
 );
 
 businessSchema.path("taskIDs").validate(

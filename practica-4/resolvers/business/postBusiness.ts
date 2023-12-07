@@ -1,12 +1,10 @@
 // @deno-types="npm:@types/express@4"
 import { Request, Response } from "express";
-import { Business } from "../../types.ts";
 import { BusinessModel, BusinessModelType } from "../../db/business/business.ts";
-import { getBusinessFromModel } from "../../controllers/getBusinessFromModel.ts";
 
 export const postBusiness = async (
   req: Request<{}, {}, BusinessModelType>,
-  res: Response<Business | { error: unknown }>
+  res: Response<BusinessModelType | { error: unknown }>
 ) => {
   try {
     const { name, workerIDs, taskIDs } = req.body;
@@ -17,9 +15,7 @@ export const postBusiness = async (
     });
     await business.save();
 
-    const businessResponse: Business = await getBusinessFromModel(business);
-
-    res.status(201).json(businessResponse).send();
+    res.status(201).send(business);
   } catch (error) {
     res.status(500).send(error);
   }

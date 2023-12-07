@@ -1,12 +1,10 @@
 // @deno-types="npm:@types/express@4"
 import { Request, Response } from "express";
-import { Worker } from "../../types.ts";
 import { WorkerModel, WorkerModelType } from "../../db/worker/worker.ts";
-import { getWorkerFromModel } from "../../controllers/getWorkerFromModel.ts";
 
 export const putWorker = async (
   req: Request<{ id: string }, {}, WorkerModelType>,
-  res: Response<Worker | { error: unknown }>
+  res: Response<WorkerModelType | { error: unknown }>
 ) => {
   const id = req.params.id;
   const { name, businessID, taskIDs } = req.body;
@@ -21,8 +19,7 @@ export const putWorker = async (
       res.status(404).send({ error: "Worker not found" });
       return;
     }
-    const workerResponse: Worker = await getWorkerFromModel(worker);
-    res.status(200).json(workerResponse).send();
+    res.status(200).send(worker);
   } catch (error) {
     res.status(500).send(error);
   }
