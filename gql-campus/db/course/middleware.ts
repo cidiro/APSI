@@ -3,33 +3,25 @@ import { InstructorModel } from "../instructor/instructor.ts";
 import { CourseModelType } from "./course.ts";
 
 export const coursePostSave = async function (doc: CourseModelType) {
-  if (doc.studentIDs.length) {
-    try {
-      await StudentModel.updateMany(
-        { _id: { $in: doc.studentIDs } },
-        { $push: { courseIDs: doc._id } },
-      );
-    } catch (_e) {
-      console.log(_e);
-    }
-  }
-
-  if (doc.instructorID) {
-    try {
-      await InstructorModel.updateOne(
-        { _id: doc.instructorID },
-        { $push: { courseIDs: doc._id } },
-      );
-    } catch (_e) {
-      console.log(_e);
-    }
+  try {
+    // Update courseIDs in related students
+    await StudentModel.updateMany(
+      { _id: { $in: doc.studentIDs } },
+      { $push: { courseIDs: doc._id } },
+    );
+    // Update courseIDs in related instructor
+    await InstructorModel.updateOne(
+      { _id: doc.instructorID },
+      { $push: { courseIDs: doc._id } },
+    );
+  } catch (_e) {
+    console.log(_e);
   }
 };
 
 export const coursePostUpdate = async function (doc: CourseModelType) {
-  console.log("coursePostUpdate");
   try {
-    // Update students
+    // studentIDs got updated: update courseIDs in related students
     const oldStudents = await StudentModel.find({
       courseIDs: { $elemMatch: { $eq: doc._id } },
     });
@@ -51,7 +43,7 @@ export const coursePostUpdate = async function (doc: CourseModelType) {
       { $push: { courseIDs: doc._id } },
     );
 
-    // Update instructor
+    // instructorID got updated: update courseIDs in related instructor
     const instructor = await InstructorModel.findOne({
       courseIDs: { $elemMatch: { $eq: doc._id } },
     });
@@ -73,25 +65,18 @@ export const coursePostUpdate = async function (doc: CourseModelType) {
 };
 
 export const coursePostDelete = async function (doc: CourseModelType) {
-  if (doc.studentIDs.length) {
-    try {
-      await StudentModel.updateMany(
-        { _id: { $in: doc.studentIDs } },
-        { $pull: { courseIDs: doc._id } },
-      );
-    } catch (_e) {
-      console.log(_e);
-    }
-  }
-
-  if (doc.instructorID) {
-    try {
-      await InstructorModel.updateOne(
-        { _id: doc.instructorID },
-        { $pull: { courseIDs: doc._id } },
-      );
-    } catch (_e) {
-      console.log(_e);
-    }
+  try {
+    // Update courseIDs in related students
+    await StudentModel.updateMany(
+      { _id: { $in: doc.studentIDs } },
+      { $pull: { courseIDs: doc._id } },
+    );
+    // Update courseIDs in related instructor
+    await InstructorModel.updateOne(
+      { _id: doc.instructorID },
+      { $pull: { courseIDs: doc._id } },
+    );
+  } catch (_e) {
+    console.log(_e);
   }
 };

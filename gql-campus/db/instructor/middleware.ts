@@ -2,20 +2,20 @@ import { InstructorModelType } from "./instructor.ts";
 import { CourseModel } from "../course/course.ts";
 
 export const instructorPostSave = async function (doc: InstructorModelType) {
-  if (doc.courseIDs.length) {
-    try {
-      await CourseModel.updateMany(
-        { _id: { $in: doc.courseIDs } },
-        { instructorID: doc._id },
-      );
-    } catch (_e) {
-      console.log(_e);
-    }
+  try {
+    // Update instructorID in related courses
+    await CourseModel.updateMany(
+      { _id: { $in: doc.courseIDs } },
+      { instructorID: doc._id },
+    );
+  } catch (_e) {
+    console.log(_e);
   }
 };
 
 export const instructorPostUpdate = async function (doc: InstructorModelType) {
   try {
+    // courseIDs got updated: update instructorID in related courses
     const oldCourses = await CourseModel.find({
       instructorID: doc._id,
     });
@@ -39,17 +39,16 @@ export const instructorPostUpdate = async function (doc: InstructorModelType) {
   } catch (_e) {
     console.log(_e);
   }
-}
+};
 
 export const instructorPostDelete = async function (doc: InstructorModelType) {
-  if (doc.courseIDs.length) {
-    try {
-      await CourseModel.updateMany(
-        { _id: { $in: doc.courseIDs } },
-        { instructorID: null },
-      );
-    } catch (_e) {
-      console.log(_e);
-    }
+  try {
+    // Update instructorID in related courses
+    await CourseModel.updateMany(
+      { _id: { $in: doc.courseIDs } },
+      { instructorID: null },
+    );
+  } catch (_e) {
+    console.log(_e);
   }
 };
