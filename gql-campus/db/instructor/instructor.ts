@@ -38,6 +38,11 @@ instructorSchema.path("courseIDs").validate(
 );
 
 instructorSchema.path("courseIDs").validate(
+  globalValidators.idsAreUnique,
+  "Some course IDs are repeated",
+);
+
+instructorSchema.path("courseIDs").validate(
   validators.coursesHaveNoInstructor,
   "Some courses already have a instructor",
 );

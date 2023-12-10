@@ -52,6 +52,11 @@ courseSchema.path("studentIDs").validate(
 );
 
 courseSchema.path("studentIDs").validate(
+  globalValidators.idsAreUnique,
+  "Some student IDs are repeated",
+);
+
+courseSchema.path("studentIDs").validate(
   validators.studentsExist,
   "Some students don't exist in the database",
 );
