@@ -2,9 +2,10 @@ import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import mongoose from "mongoose";
 
+import typeDefs from "./typeDefs.ts";
 import queryResolvers from "./resolvers/queries/index.ts";
 import mutationResolvers from "./resolvers/mutations/index.ts";
-import typeDefs from "./typeDefs.ts";
+import entityResolvers from "./resolvers/entities/index.ts";
 
 
 const MONGO_URL = Deno.env.get("MONGO_URL");
@@ -21,6 +22,7 @@ const server = new ApolloServer({
   resolvers: {
     ...queryResolvers,
     ...mutationResolvers,
+    ...entityResolvers,
   },
 });
 
