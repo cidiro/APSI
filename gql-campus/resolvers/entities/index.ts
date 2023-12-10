@@ -2,10 +2,10 @@ import { Student } from "./student.ts";
 import { Instructor } from "./instructor.ts";
 import { Course } from "./course.ts";
 
-const entityResolvers = {
+const entities = {
   Student,
   Instructor,
   Course,
 };
 
-export default entityResolvers;
+export default entities;

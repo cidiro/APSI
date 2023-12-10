@@ -7,7 +7,7 @@ import getCourse from "./course/getCourse.ts";
 import getCourses from "./course/getCourses.ts";
 import filterCourses from "./course/filterCourses.ts";
 
-const queryResolvers = {
+const queries = {
   Query: {
     ...getStudent.Query,
     ...getStudents.Query,
@@ -20,4 +20,4 @@ const queryResolvers = {
   },
 };
 
-export default queryResolvers;
+export default queries;

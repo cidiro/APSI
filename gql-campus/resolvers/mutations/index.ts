@@ -8,7 +8,7 @@ import addCourse from "./course/addCourse.ts";
 import deleteCourse from "./course/deleteCourse.ts";
 import updateCourse from "./course/updateCourse.ts";
 
-const mutationResolvers = {
+const mutations = {
   Mutation: {
     ...addStudent.Mutation,
     ...deleteStudent.Mutation,
@@ -22,4 +22,4 @@ const mutationResolvers = {
   },
 };
 
-export default mutationResolvers;
+export default mutations;
