@@ -1,14 +1,10 @@
-import { Course } from "../../../types.ts";
-import { CourseModel } from "../../../db/course/course.ts";
-import { getCourseFromModel } from "../../../controllers/getCourseFromModel.ts";
+import { CourseModel, CourseModelType } from "../../../db/course/course.ts";
 
 const filterCourses = {
   Query: {
-    filterCourses: async ( _: unknown, args: { credits: number }, ): Promise<Course[]> => {
+    filterCourses: async ( _: unknown, args: { credits: number }, ): Promise<CourseModelType[]> => {
       const courses = await CourseModel.find({ credits: args.credits }).exec();
-      return await Promise.all(
-        courses.map((course) => getCourseFromModel(course)),
-      );
+      return courses;
     },
   },
 };

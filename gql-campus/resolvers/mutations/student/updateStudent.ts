@@ -1,14 +1,12 @@
 import { GraphQLError } from "graphql";
-import { Student } from "../../../types.ts";
-import { StudentModel } from "../../../db/student/student.ts";
-import { getStudentFromModel } from "../../../controllers/getStudentFromModel.ts";
+import { StudentModel, StudentModelType } from "../../../db/student/student.ts";
 
 const updateStudent = {
   Mutation: {
     updateStudent: async (
       _: unknown,
       args: { id: string; name: string; email: string; major: string; year: number; courseIDs: string[] },
-    ): Promise<Student> => {
+    ): Promise<StudentModelType> => {
       const student = await StudentModel.findByIdAndUpdate(
         args.id,
         { name: args.name, email: args.email, major: args.major, year: args.year, courseIDs: args.courseIDs },
@@ -20,7 +18,7 @@ const updateStudent = {
           extensions: { code: "NOT_FOUND" },
         });
       }
-      return getStudentFromModel(student);
+      return student;
     },
   },
 };

@@ -1,14 +1,10 @@
-import { Instructor } from "../../../types.ts";
-import { InstructorModel } from "../../../db/instructor/instructor.ts";
-import { getInstructorFromModel } from "../../../controllers/getInstructorFromModel.ts";
+import { InstructorModel, InstructorModelType } from "../../../db/instructor/instructor.ts";
 
 const getInstructors = {
   Query: {
-    getInstructors: async (): Promise<Instructor[]> => {
+    getInstructors: async (): Promise<InstructorModelType[]> => {
       const instructors = await InstructorModel.find({}).exec();
-      return await Promise.all(
-        instructors.map((instructor) => getInstructorFromModel(instructor))
-      );
+      return instructors;
     },
   },
 };

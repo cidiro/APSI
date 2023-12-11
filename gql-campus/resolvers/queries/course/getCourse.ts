@@ -1,16 +1,16 @@
 import { GraphQLError } from "graphql";
-import { Course } from "../../../types.ts";
-import { CourseModel } from "../../../db/course/course.ts";
-import { getCourseFromModel } from "../../../controllers/getCourseFromModel.ts";
+import { CourseModel, CourseModelType } from "../../../db/course/course.ts";
 
 const getCourse = {
   Query: {
-    getInstructor: async (_: unknown, args: { id: string }): Promise<Course> => {
+    getInstructor: async (_: unknown, args: { id: string }): Promise<CourseModelType> => {
       const course = await CourseModel.findById(args.id).exec();
       if (!course) {
-        throw new GraphQLError("Course not found");
+        throw new GraphQLError(`No course found with id ${args.id}`, {
+          extensions: { code: "NOT_FOUND" },
+        });
       }
-      return await getCourseFromModel(course);
+      return course;
     },
   },
 };

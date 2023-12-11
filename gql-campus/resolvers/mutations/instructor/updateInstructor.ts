@@ -1,14 +1,12 @@
 import { GraphQLError } from "graphql";
-import { Instructor } from "../../../types.ts";
-import { InstructorModel } from "../../../db/instructor/instructor.ts";
-import { getInstructorFromModel } from "../../../controllers/getInstructorFromModel.ts";
+import { InstructorModel, InstructorModelType } from "../../../db/instructor/instructor.ts";
 
 const updateInstructor = {
   Mutation: {
     updateInstructor: async (
       _: unknown,
       args: { id: string; name: string; officeHours: string; courseIDs: string[] }
-    ): Promise<Instructor> => {
+    ): Promise<InstructorModelType> => {
       const instructor = await InstructorModel.findByIdAndUpdate(
         args.id,
         { name: args.name, officeHours: args.officeHours, courseIDs: args.courseIDs },
@@ -20,7 +18,7 @@ const updateInstructor = {
           extensions: { code: "NOT_FOUND" },
         });
       }
-      return await getInstructorFromModel(instructor);
+      return instructor;
     },
   },
 };

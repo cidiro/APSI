@@ -1,13 +1,11 @@
-import { Student } from "../../../types.ts";
-import { StudentModel } from "../../../db/student/student.ts";
-import { getStudentFromModel } from "../../../controllers/getStudentFromModel.ts";
+import { StudentModel, StudentModelType } from "../../../db/student/student.ts";
 
 const addStudent = {
   Mutation: {
     addStudent: async (
       _: unknown,
       args: { name: string; email: string, major: string, year: number, courseIDs: string[] }
-    ): Promise<Student> => {
+    ): Promise<StudentModelType> => {
       const student = new StudentModel({
         name: args.name,
         email: args.email,
@@ -17,7 +15,7 @@ const addStudent = {
       });
 
       await student.save();
-      return getStudentFromModel(student);
+      return student;
     },
   },
 };

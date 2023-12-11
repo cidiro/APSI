@@ -1,18 +1,16 @@
 import { GraphQLError } from "graphql";
-import { Student } from "../../../types.ts";
-import { StudentModel } from "../../../db/student/student.ts";
-import { getStudentFromModel } from "../../../controllers/getStudentFromModel.ts";
+import { StudentModel, StudentModelType } from "../../../db/student/student.ts";
 
 const getStudent = {
   Query: {
-    getStudent: async (_: unknown, args: { id: string }): Promise<Student> => {
+    getStudent: async (_: unknown, args: { id: string }): Promise<StudentModelType> => {
       const student = await StudentModel.findById(args.id).exec();
       if (!student) {
-        throw new GraphQLError(`No pet found with id ${args.id}`, {
+        throw new GraphQLError(`No student found with id ${args.id}`, {
           extensions: { code: "NOT_FOUND" },
         });
       }
-      return getStudentFromModel(student);
+      return student;
     },
   },
 };
