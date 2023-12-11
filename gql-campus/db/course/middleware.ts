@@ -49,7 +49,6 @@ export const coursePostUpdate = async function (doc: CourseModelType) {
     });
 
     if (instructor?._id !== doc.instructorID) {
-      console.log("instructor changed !!");
       await InstructorModel.updateOne(
         { _id: instructor?._id },
         { $pull: { courseIDs: doc._id } },
