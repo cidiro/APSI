@@ -11,6 +11,7 @@ const typeDefs = `#graphql
   type Instructor {
     id: ID!
     name: String!
+    email: String!
     officeHours: String!
     courses: [Course!]!
   }
@@ -37,17 +38,17 @@ const typeDefs = `#graphql
   }
 
   type Mutation {
-    addStudent(name: String!, email: String!, major: String!, year: Int!): Student!
+    addStudent(name: String!, email: String!, major: String!, year: Int!, courseIDs: [ID!]): Student!
+    updateStudent(id: ID!, name: String, email: String, major: String, year: Int, courseIDs: [ID!]): Student!
     deleteStudent(id: ID!): Student!
-    updateStudent(id: ID!, name: String, email: String, major: String, year: Int): Student!
 
-    addInstructor(name: String!, officeHours: String!): Instructor!
+    addInstructor(name: String!, email: String!, officeHours: String!, courseIDs: [ID!]): Instructor!
+    updateInstructor(id: ID!, name: String, email: String, officeHours: String, courseIDs: [ID!]): Instructor!
     deleteInstructor(id: ID!): Instructor!
-    updateInstructor(id: ID!, name: String, officeHours: String): Instructor!
 
-    addCourse(name: String!, credits: Int!): Course!
+    addCourse(name: String!, credits: Int!, instructorID: ID, studentIDs: [ID!]): Course!
+    updateCourse(id: ID!, name: String, credits: Int, instructorID: ID, studentIDs: [ID!]): Course!
     deleteCourse(id: ID!): Course!
-    updateCourse(id: ID!, name: String, credits: Int): Course!
   }
 `;
 

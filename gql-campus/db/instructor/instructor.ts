@@ -13,7 +13,8 @@ const Schema = mongoose.Schema;
 
 const instructorSchema = new Schema(
   {
-    name: { type: String, required: true },
+    name: { type: String, required: true, unique: true },
+    email: { type: String, required: true },
     officeHours: { type: String, required: true },
     courseIDs: [
       { type: Schema.Types.ObjectId, required: false, ref: "Course" },
@@ -25,6 +26,11 @@ const instructorSchema = new Schema(
 instructorSchema.path("name").validate(
   globalValidators.nameIsValid,
   "Name must be between 3 and 50 characters",
+);
+
+instructorSchema.path("email").validate(
+  globalValidators.emailIsValid,
+  "Invalid email address",
 );
 
 instructorSchema.path("officeHours").validate(

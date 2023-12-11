@@ -10,6 +10,7 @@ export type Student = {
 export type Instructor = {
   id: string;
   name: string;
+  email: string;
   officeHours: string;
   courses: Array<Omit<Course, "instructor" | "students">>;
 };

@@ -13,8 +13,8 @@ const Schema = mongoose.Schema;
 
 const studentSchema = new Schema(
   {
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
+    name: { type: String, required: true, unique: true },
+    email: { type: String, required: true },
     major: { type: String, required: true },
     year: { type: Number, required: true },
     courseIDs: [
@@ -31,7 +31,7 @@ studentSchema.path("name").validate(
 
 studentSchema.path("email").validate(
   globalValidators.emailIsValid,
-  "Invalid email",
+  "Invalid email address",
 );
 
 studentSchema.path("major").validate(

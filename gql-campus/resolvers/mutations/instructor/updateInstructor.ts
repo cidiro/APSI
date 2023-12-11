@@ -5,11 +5,11 @@ const updateInstructor = {
   Mutation: {
     updateInstructor: async (
       _: unknown,
-      args: { id: string; name: string; officeHours: string; courseIDs: string[] }
+      args: { id: string; name: string; email: string, officeHours: string, courseIDs: string[] }
     ): Promise<InstructorModelType> => {
       const instructor = await InstructorModel.findByIdAndUpdate(
         args.id,
-        { name: args.name, officeHours: args.officeHours, courseIDs: args.courseIDs },
+        { name: args.name, email: args.email, officeHours: args.officeHours, courseIDs: args.courseIDs },
         { new: true, runValidators: true },
       ).exec();
 
