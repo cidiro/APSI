@@ -22,11 +22,29 @@ const driverExists = async (driverID: mongoose.Types.ObjectId) => {
   }
 };
 
-// Validate that the last travel of the person is not ongoing
-const personHasNoOngoingTravel = async (personID: mongoose.Types.ObjectId) => {
+// Validate that the last travel of the client is not ongoing
+const clientHasNoOngoingTravel = async (clientID: mongoose.Types.ObjectId) => {
   try {
-    // VALIDATOR NOT IMPLEMENTED
-    return true;
+    const client = ClientModel.findOne({ _id: clientID });
+    const travelID = client?.travelIDs[-1];
+    const travel = await TravelModel.findOne({
+      _id: travelID,
+    });
+    return travel?.status !== "ONGOING";
+  } catch (_e) {
+    return false;
+  }
+};
+
+// Validate that the last travel of the driver is not ongoing
+const driverHasNoOngoingTravel = async (driverID: mongoose.Types.ObjectId) => {
+  try {
+    const client = DriverModel.findOne({ _id: driverID });
+    const travelID = client?.travelIDs[-1];
+    const travel = await TravelModel.findOne({
+      _id: travelID,
+    });
+    return travel?.status !== "ONGOING";
   } catch (_e) {
     return false;
   }
@@ -35,5 +53,6 @@ const personHasNoOngoingTravel = async (personID: mongoose.Types.ObjectId) => {
 export const validators = {
   clientExists,
   driverExists,
-  personHasNoOngoingTravel,
+  clientHasNoOngoingTravel,
+  driverHasNoOngoingTravel
 };

@@ -44,7 +44,7 @@ travelSchema.path("clientID").validate(
 );
 
 travelSchema.path("clientID").validate(
-  validators.personHasNoOngoingTravel,
+  validators.clientHasNoOngoingTravel,
   "Client already has an ONGOING travel",
 );
 
@@ -56,6 +56,11 @@ travelSchema.path("driverID").validate(
 travelSchema.path("driverID").validate(
   validators.driverExists,
   "Driver does not exist",
+);
+
+travelSchema.path("driverID").validate(
+  validators.driverHasNoOngoingTravel,
+  "Driver already has an ONGOING travel",
 );
 
 // on save: update related documents
