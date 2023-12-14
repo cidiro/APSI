@@ -25,7 +25,6 @@ export type Travel = {
 };
 
 export enum Status {
-  PENDING,
   ONGOING,
   COMPLETED,
 }

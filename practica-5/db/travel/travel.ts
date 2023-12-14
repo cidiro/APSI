@@ -16,7 +16,7 @@ const travelSchema = new Schema(
     money: { type: Number, required: true, min: 5},
     distance: { type: Number, required: true, min: 0.01 },
     date: { type: String, required: true },
-    status: { type: String, required: false, enum: Status, default: Status.PENDING },
+    status: { type: String, required: false, enum: Status, default: Status.ONGOING },
     clientID: { type: Schema.Types.ObjectId, required: false, ref: "Client" },
     driverID: { type: Schema.Types.ObjectId, required: false, ref: "Driver" },
   },

@@ -22,13 +22,18 @@ const driverExists = async (driverID: mongoose.Types.ObjectId) => {
   }
 };
 
-// Validate that the person (client or driver) has no travel with ongoing status
+// Validate that the last travel of the person is not ongoing
 const personHasNoOngoingTravel = async (personID: mongoose.Types.ObjectId) => {
-  // VALIDATOR NOT IMPLEMENTED
-  return false;
+  try {
+    // VALIDATOR NOT IMPLEMENTED
+    return true;
+  } catch (_e) {
+    return false;
+  }
 };
 
 export const validators = {
   clientExists,
   driverExists,
+  personHasNoOngoingTravel,
 };
