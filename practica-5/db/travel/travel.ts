@@ -48,6 +48,11 @@ travelSchema.path("clientID").validate(
   "Client already has an ONGOING travel",
 );
 
+travelSchema.path("clientID").validate(
+  validators.clientHasEnoughMoney,
+  "Client does not have enough money",
+);
+
 travelSchema.path("driverID").validate(
   globalValidators.idIsValid,
   "Invalid Driver ID",

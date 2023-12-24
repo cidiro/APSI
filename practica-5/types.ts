@@ -2,7 +2,12 @@ export type Client = {
   id: string;
   name: string;
   email: string;
-  cards?: Array<string>;
+  cards?: Array<{
+    number: string;
+    cvv: string;
+    expirity: string;
+    money: number;
+  }>;
   travels?: Array<Omit<Travel, "client" | "driver">>;
 };
 

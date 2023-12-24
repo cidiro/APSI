@@ -7,7 +7,10 @@ import { clientPostDelete, clientPostSave, clientPostUpdate } from "./middleware
 export type ClientModelType =
   & mongoose.Document
   & Omit<Client, "id" | "travels">
-  & { travelIDs: Array<mongoose.Types.ObjectId> };
+  & {
+    travelIDs: Array<mongoose.Types.ObjectId>;
+    hasOngoingTravel: boolean;
+  };
 
 const Schema = mongoose.Schema;
 
@@ -15,8 +18,15 @@ const clientSchema = new Schema(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    cards: [ { type: String, required: false }, ],
+    cards: [ {
+      type: {
+        number: String,
+        cvv: String,
+        expirity: String,
+        money: Number,
+      }, required: false }, ],
     travelIDs: [ { type: Schema.Types.ObjectId, required: false, ref: "Travel" }, ],
+    hasOngoingTravel: { type: Boolean, required: false, default: false },
   },
   { timestamps: true },
 );
@@ -33,8 +43,8 @@ clientSchema.path("email").validate(
 
 // TODO: validate that the card number is valid
 clientSchema.path("cards").validate(
-  globalValidators.nameIsValid,
-  "message",
+  validators.cardsAreValid,
+  "Invalid cards",
 );
 
 clientSchema.path("travelIDs").validate(

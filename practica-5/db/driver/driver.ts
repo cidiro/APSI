@@ -7,7 +7,10 @@ import { driverPostDelete, driverPostSave, driverPostUpdate } from "./middleware
 export type DriverModelType =
   & mongoose.Document
   & Omit<Driver, "id" | "travels">
-  & { travelIDs: Array<mongoose.Types.ObjectId> };
+  & {
+    travelIDs: Array<mongoose.Types.ObjectId>;
+    hasOngoingTravel: boolean;
+  };
 
 const Schema = mongoose.Schema;
 
@@ -17,6 +20,7 @@ const driverSchema = new Schema(
     email: { type: String, required: true, unique: true },
     username: { type: String, required: true, unique: true},
     travelIDs: [ { type: Schema.Types.ObjectId, required: false, ref: "Travel" }, ],
+    hasOngoingTravel: { type: Boolean, required: false, default: false },
   },
   { timestamps: true },
 );

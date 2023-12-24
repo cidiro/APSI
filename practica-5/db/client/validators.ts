@@ -1,6 +1,18 @@
 import mongoose from "mongoose";
 import { TravelModel } from "../travel/travel.ts";
 
+// Validate that client's cards are valid
+const cardsAreValid = (cards: any[]) => {
+  return cards.every((card) => {
+    return (
+      card.number.length === 16 &&
+      card.cvv.length === 3 &&
+      /^\d{2}\/\d{4}$/.test(card.expirity) &&
+      card.money >= 0
+    );
+  });
+};
+
 // Validate that travelIDs exists in the database
 const travelsExist = async (travelIDs: mongoose.Types.ObjectId[]) => {
   try {
@@ -22,6 +34,7 @@ const onlyOneTravelIsOngoing = async (travelIDs: mongoose.Types.ObjectId[]) => {
 };
 
 export const validators = {
+  cardsAreValid,
   travelsExist,
   onlyOneTravelIsOngoing,
 };

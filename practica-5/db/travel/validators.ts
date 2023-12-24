@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { TravelModelType } from "./travel.ts";
 import { ClientModel } from "../client/client.ts";
 import { DriverModel } from "../driver/driver.ts";
 
@@ -25,12 +26,8 @@ const driverExists = async (driverID: mongoose.Types.ObjectId) => {
 // Validate that the last travel of the client is not ongoing
 const clientHasNoOngoingTravel = async (clientID: mongoose.Types.ObjectId) => {
   try {
-    const client = ClientModel.findOne({ _id: clientID });
-    const travelID = client?.travelIDs[-1];
-    const travel = await TravelModel.findOne({
-      _id: travelID,
-    });
-    return travel?.status !== "ONGOING";
+    const client = await ClientModel.findOne({ _id: clientID });
+    return !client?.hasOngoingTravel;
   } catch (_e) {
     return false;
   }
@@ -39,12 +36,18 @@ const clientHasNoOngoingTravel = async (clientID: mongoose.Types.ObjectId) => {
 // Validate that the last travel of the driver is not ongoing
 const driverHasNoOngoingTravel = async (driverID: mongoose.Types.ObjectId) => {
   try {
-    const client = DriverModel.findOne({ _id: driverID });
-    const travelID = client?.travelIDs[-1];
-    const travel = await TravelModel.findOne({
-      _id: travelID,
-    });
-    return travel?.status !== "ONGOING";
+    const driver = await DriverModel.findOne({ _id: driverID });
+    return !driver?.hasOngoingTravel;
+  } catch (_e) {
+    return false;
+  }
+};
+
+// Validate that the client has enough money to pay for the travel
+const clientHasEnoughMoney = async (clientID: mongoose.Types.ObjectId, validatorProperties?: any) => {
+  try {
+    const client = await ClientModel.findOne({ _id: clientID });
+    return client?.cards?.some((card) => card.money >= validatorProperties?.money);
   } catch (_e) {
     return false;
   }
@@ -54,5 +57,6 @@ export const validators = {
   clientExists,
   driverExists,
   clientHasNoOngoingTravel,
-  driverHasNoOngoingTravel
+  driverHasNoOngoingTravel,
+  clientHasEnoughMoney,
 };

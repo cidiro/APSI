@@ -5,16 +5,16 @@ import { DriverModel } from "../driver/driver.ts";
 
 export const travelPostSave = async function (doc: TravelModelType) {
   try {
-    // Update travelIDs in related client
+    // Update travelIDs and hasOngoingTravel in related client
     await ClientModel.updateOne(
       { _id: doc.clientID },
-      { $push: { travelIDs: doc._id } },
+      { $push: { travelIDs: doc._id }, hasOngoingTravel: true },
     );
 
-    // Update travelIDs in related driver
+    // Update travelIDs and hasOngoingTravel in related driver
     await DriverModel.updateOne(
       { _id: doc.driverID },
-      { $push: { travelIDs: doc._id } },
+      { $push: { travelIDs: doc._id }, hasOngoingTravel: true },
     );
   } catch (_e) {
     console.log(_e);
@@ -54,6 +54,16 @@ export const travelPostUpdate = async function (doc: TravelModelType) {
         { $push: { travelIDs: doc._id } },
       );
     }
+
+    // status got updated: update hasOngoingTravel in related client and driver
+    await ClientModel.updateOne(
+      { _id: doc.clientID },
+      { hasOngoingTravel: doc.status === "ONGOING" },
+    );
+    await DriverModel.updateOne(
+      { _id: doc.driverID },
+      { hasOngoingTravel: doc.status === "ONGOING" },
+    );
   } catch (_e) {
     console.log(_e);
   }
@@ -61,16 +71,16 @@ export const travelPostUpdate = async function (doc: TravelModelType) {
 
 export const travelPostDelete = async function (doc: TravelModelType) {
   try {
-    // Update travelIDs in related client
+    // Update travelIDs and hasOngoingTravel in related client
     await ClientModel.updateOne(
       { _id: doc.clientID },
-      { $pull: { travelIDs: doc._id } },
+      { $pull: { travelIDs: doc._id }, hasOngoingTravel: false },
     );
 
-    // Update travelIDs in related driver
+    // Update travelIDs and hasOngoingTravel in related driver
     await DriverModel.updateOne(
       { _id: doc.driverID },
-      { $pull: { travelIDs: doc._id } },
+      { $pull: { travelIDs: doc._id }, hasOngoingTravel: false },
     );
   } catch (_e) {
     console.log(_e);

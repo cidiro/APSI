@@ -17,8 +17,8 @@ const typeDefs = `#graphql
 
   type Travel {
     id: ID!
-    money: Double!
-    distance: Double!
+    money: Float!
+    distance: Float!
     date: String!
     status: String
     client: Client
@@ -40,14 +40,16 @@ const typeDefs = `#graphql
     addClient(name: String!, email: String!, cards: [String!], travels: [ID!]): Client!
     updateClient(id: ID!, name: String, email: String, cards: [String!], travels: [ID!]): Client!
     deleteClient(id: ID!): Client!
+    addCard(id: ID!, number: String!, cvv: String!, expirity: String!, money: Int!): Client!
 
     addDriver(name: String!, email: String!, username: String!, travels: [ID!]): Driver!
     updateDriver(id: ID!, name: String, email: String, username: String, travels: [ID!]): Driver!
     deleteDriver(id: ID!): Driver!
 
-    addTravel(money: Double!, distance: Double!, date: String!, status: String, client: ID, driver: ID): Travel!
-    updateTravel(id: ID!, money: Double, distance: Double, date: String, status: String, client: ID, driver: ID): Travel!
+    addTravel(money: Float!, distance: Float!, date: String!, status: String, client: ID, driver: ID): Travel!
+    updateTravel(id: ID!, money: Float, distance: Float, date: String, status: String, client: ID, driver: ID): Travel!
     deleteTravel(id: ID!): Travel!
+    endTravel(id: ID!): Travel!
   }
 `;
 
