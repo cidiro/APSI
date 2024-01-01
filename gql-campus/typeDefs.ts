@@ -5,7 +5,7 @@ const typeDefs = `#graphql
     email: String!
     major: String!
     year: Int!
-    courses: [Course!]!
+    courses: [Course!]
   }
 
   type Instructor {
@@ -13,7 +13,7 @@ const typeDefs = `#graphql
     name: String!
     email: String!
     officeHours: String!
-    courses: [Course!]!
+    courses: [Course!]
   }
 
   type Course {
@@ -21,7 +21,7 @@ const typeDefs = `#graphql
     name: String!
     credits: Int!
     instructor: Instructor
-    students: [Student!]!
+    students: [Student!]
   }
 
   type Query {

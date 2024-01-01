@@ -12,13 +12,13 @@ export type Instructor = {
   name: string;
   email: string;
   officeHours: string;
-  courses: Array<Omit<Course, "instructor" | "students">>;
+  courses?: Array<Omit<Course, "instructor" | "students">>;
 };
 
 export type Course = {
   id: string;
   name: string;
   credits: number;
-  instructor: Omit<Instructor, "courses"> | null;
-  students: Array<Omit<Student, "courses">>;
+  instructor?: Omit<Instructor, "courses"> | null;
+  students?: Array<Omit<Student, "courses">>;
 };
