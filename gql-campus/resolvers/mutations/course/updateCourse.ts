@@ -5,7 +5,7 @@ const updateCourse = {
   Mutation: {
     updateCourse: async (
       _: unknown,
-      args: { id: string; name: string; credits: number; instructorID: string; studentIDs: string[]; }
+      args: { id: string, name: string, credits: number, instructorID: string, studentIDs: string[] }
     ): Promise<CourseModelType> => {
       const course = await CourseModel.findByIdAndUpdate(
         args.id,

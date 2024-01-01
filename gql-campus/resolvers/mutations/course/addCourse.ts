@@ -4,7 +4,7 @@ const addCourse = {
   Mutation: {
     addCourse: async (
       _: unknown,
-      args: { name: string; credits: number; instructorID: string; studentIDs: string[]; }
+      args: { name: string, credits: number, instructorID: string, studentIDs: string[] }
     ): Promise<CourseModelType> => {
       const course = new CourseModel({
         name: args.name,

@@ -4,7 +4,7 @@ export type Student = {
   email: string;
   major: string;
   year: number;
-  courses: Array<Omit<Course, "instructor" | "students">>;
+  courses?: Array<Omit<Course, "instructor" | "students">>;
 };
 
 export type Instructor = {
