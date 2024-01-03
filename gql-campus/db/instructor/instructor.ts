@@ -7,55 +7,72 @@ import { instructorPostDelete, instructorPostSave, instructorPostUpdate } from "
 export type InstructorModelType =
   & mongoose.Document
   & Omit<Instructor, "id" | "courses">
-  & { courseIDs: Array<mongoose.Types.ObjectId> };
+  & { courseIDs: mongoose.Types.ObjectId[] };
 
-const Schema = mongoose.Schema;
 
-const instructorSchema = new Schema(
+const instructorSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true, unique: true },
-    email: { type: String, required: true },
-    officeHours: { type: String, required: true },
-    courseIDs: [
-      { type: Schema.Types.ObjectId, required: false, ref: "Course" },
-    ],
+    name: {
+      type: String,
+      required: true,
+      unique: true,
+      validate: [
+        {
+          validator: globalValidators.nameIsValid,
+          message: "Name must be between 3 and 50 characters"
+        }
+      ]
+    },
+
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      validate: [
+        {
+          validator: globalValidators.emailIsValid,
+          message: "Invalid email address"
+        }
+      ]
+    },
+
+    officeHours: {
+      type: String,
+      required: true,
+      validate: [
+        {
+          validator: globalValidators.officeHoursIsValid,
+          message: "Office hours must be between 3 and 50 characters"
+        }
+      ]
+    },
+
+    courseIDs: [{
+      type: mongoose.Schema.Types.ObjectId,
+      required: false,
+      ref: "Course",
+      validate: [
+        {
+          validator: globalValidators.idsAreValid,
+          message: "Invalid course IDs"
+        },
+        {
+          validator: globalValidators.idsAreUnique,
+          message: "Some course IDs are repeated"
+        },
+        {
+          validator: validators.coursesHaveNoInstructor,
+          message: "Some courses already have a instructor"
+        },
+        {
+          validator: validators.coursesExist,
+          message: "Some courses don't exist in the database"
+        }
+      ]
+    }]
   },
-  { timestamps: true },
-);
 
-instructorSchema.path("name").validate(
-  globalValidators.nameIsValid,
-  "Name must be between 3 and 50 characters",
-);
-
-instructorSchema.path("email").validate(
-  globalValidators.emailIsValid,
-  "Invalid email address",
-);
-
-instructorSchema.path("officeHours").validate(
-  globalValidators.officeHoursIsValid,
-  "Office hours must be between 3 and 50 characters",
-);
-
-instructorSchema.path("courseIDs").validate(
-  globalValidators.idsAreValid,
-  "Invalid course IDs",
-);
-
-instructorSchema.path("courseIDs").validate(
-  globalValidators.idsAreUnique,
-  "Some course IDs are repeated",
-);
-
-instructorSchema.path("courseIDs").validate(
-  validators.coursesHaveNoInstructor,
-  "Some courses already have a instructor",
-);
-
-instructorSchema.path("courseIDs").validate(
-  validators.coursesExist,
-  "Some courses don't exist in the database",
+  { timestamps: true }
 );
 
 // on save: update related documents
@@ -69,5 +86,5 @@ instructorSchema.post("deleteOne", instructorPostDelete);
 
 export const InstructorModel = mongoose.model<InstructorModelType>(
   "Instructor",
-  instructorSchema,
+  instructorSchema
 );

@@ -7,56 +7,79 @@ import { studentPostDelete, studentPostSave, studentPostUpdate } from "./middlew
 export type StudentModelType =
   & mongoose.Document
   & Omit<Student, "id" | "courses">
-  & { courseIDs: Array<mongoose.Types.ObjectId> };
+  & { courseIDs: mongoose.Types.ObjectId[] };
 
-const Schema = mongoose.Schema;
 
-const studentSchema = new Schema(
+const studentSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true, unique: true },
-    email: { type: String, required: true },
-    major: { type: String, required: true },
-    year: { type: Number, required: true },
-    courseIDs: [
-      { type: Schema.Types.ObjectId, required: false, ref: "Course" },
-    ],
+    name: {
+      type: String,
+      required: true,
+      unique: true,
+      validate: [
+        {
+          validator: globalValidators.nameIsValid,
+          message: "Name must be between 3 and 50 characters"
+        }
+      ]
+    },
+
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      validate: [
+        {
+          validator: globalValidators.emailIsValid,
+          message: "Invalid email address"
+        }
+      ]
+    },
+
+    major: {
+      type: String,
+      required: true,
+      validate: [
+        {
+          validator: globalValidators.majorIsValid,
+          message: "Major must be between 3 and 50 characters"
+        }
+      ]
+    },
+
+    year: {
+      type: Number,
+      required: true,
+      validate: [
+        {
+          validator: globalValidators.yearIsValid,
+          message: "Enrollment year must be between 1 and 5"
+        }
+      ]
+    },
+
+    courseIDs: [{
+      type: mongoose.Schema.Types.ObjectId,
+      required: false,
+      ref: "Course",
+      validate: [
+        {
+          validator: globalValidators.idsAreValid,
+          message: "Invalid course IDs"
+        },
+        {
+          validator: globalValidators.idsAreUnique,
+          message: "Some course IDs are repeated"
+        },
+        {
+          validator: validators.coursesExist,
+          message: "Some courses don't exist in the database"
+        },
+      ],
+    }]
   },
-  { timestamps: true },
-);
 
-studentSchema.path("name").validate(
-  globalValidators.nameIsValid,
-  "Name must be between 3 and 50 characters",
-);
-
-studentSchema.path("email").validate(
-  globalValidators.emailIsValid,
-  "Invalid email address",
-);
-
-studentSchema.path("major").validate(
-  globalValidators.majorIsValid,
-  "Major must be between 3 and 50 characters",
-);
-
-studentSchema.path("year").validate(
-  globalValidators.yearIsValid,
-  "Enrollment year must be between 1 and 5",
-);
-
-studentSchema.path("courseIDs").validate(
-  globalValidators.idsAreValid,
-  "Invalid course IDs",
-);
-
-studentSchema.path("courseIDs").validate(
-  globalValidators.idsAreUnique,
-  "Some course IDs are repeated",
-);
-
-studentSchema.path("courseIDs").validate(
-  validators.coursesExist,
-  "Some courses don't exist in the database",
+  { timestamps: true }
 );
 
 // on save: update related documents
@@ -70,5 +93,5 @@ studentSchema.post("deleteOne", studentPostDelete);
 
 export const StudentModel = mongoose.model<StudentModelType>(
   "Student",
-  studentSchema,
+  studentSchema
 );
