@@ -82,14 +82,10 @@ const studentSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// on save: update related documents
-studentSchema.post("save", studentPostSave);
-
-// on update: update related documents
-studentSchema.post("findOneAndUpdate", studentPostUpdate);
-
-// on delete: update related documents
-studentSchema.post("deleteOne", studentPostDelete);
+studentSchema
+  .post("save", studentPostSave)
+  .post("findOneAndUpdate", studentPostUpdate)
+  .post("findOneAndDelete", studentPostDelete);
 
 export const StudentModel = mongoose.model<StudentModelType>(
   "Student",

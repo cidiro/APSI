@@ -75,14 +75,10 @@ const instructorSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// on save: update related documents
-instructorSchema.post("save", instructorPostSave);
-
-// on update: update related documents
-instructorSchema.post("findOneAndUpdate", instructorPostUpdate);
-
-// on delete: update related documents
-instructorSchema.post("deleteOne", instructorPostDelete);
+instructorSchema
+  .post("save", instructorPostSave)
+  .post("findOneAndUpdate", instructorPostUpdate)
+  .post("findOneAndDelete", instructorPostDelete);
 
 export const InstructorModel = mongoose.model<InstructorModelType>(
   "Instructor",

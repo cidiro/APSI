@@ -78,14 +78,10 @@ const courseSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// on save: update related documents
-courseSchema.post("save", coursePostSave);
-
-// on update: update related documents
-courseSchema.post("findOneAndUpdate", coursePostUpdate);
-
-// on delete: update related documents
-courseSchema.post("deleteOne", coursePostDelete);
+courseSchema
+  .post("save", coursePostSave)
+  .post("findOneAndUpdate", coursePostUpdate)
+  .post("findOneAndDelete", coursePostDelete);
 
 export const CourseModel = mongoose.model<CourseModelType>(
   "Course",
