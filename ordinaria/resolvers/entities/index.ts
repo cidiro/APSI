@@ -1,6 +1,6 @@
-import { Student } from "./student.ts";
-import { Instructor } from "./instructor.ts";
-import { Course } from "./course.ts";
+import { Student } from "./Student.ts";
+import { Instructor } from "./Instructor.ts";
+import { Course } from "./Course.ts";
 
 const entities = {
   Student,
