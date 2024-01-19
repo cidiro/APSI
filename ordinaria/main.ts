@@ -17,7 +17,7 @@ await mongoose.connect(MONGO_URL);
 
 const server = new ApolloServer({
   typeDefs,
-  resolvers,
+  resolvers
 });
 
 const { url } = await startStandaloneServer(server);

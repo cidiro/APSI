@@ -1,11 +1,23 @@
-import entities from "./entities/index.ts";
-import queries from "./queries/index.ts";
-import mutations from "./mutations/index.ts";
+import addContact from "./mutations/addContact.ts"
+import updateContact from "./mutations/updateContact.ts";
+import deleteContact from "./mutations/deleteContact.ts";
+
+import getContact from "./queries/getContact.ts";
+import getContacts from "./queries/getContacts.ts";
+
+import { Contact } from "./entities/Contact.ts"
 
 const resolvers = {
-  ...entities,
-  ...queries,
-  ...mutations,
+  Contact,
+  Query: {
+    getContact,
+    getContacts
+  },
+  Mutation: {
+    addContact,
+    updateContact,
+    deleteContact
+  }
 };
 
 export default resolvers;

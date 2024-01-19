@@ -1,54 +1,21 @@
 const typeDefs = `#graphql
-  type Student {
+  type Contact {
     id: ID!
-    name: String!
-    email: String!
-    major: String!
-    year: Int!
-    courses: [Course!]
-  }
-
-  type Instructor {
-    id: ID!
-    name: String!
-    email: String!
-    officeHours: String!
-    courses: [Course!]
-  }
-
-  type Course {
-    id: ID!
-    name: String!
-    credits: Int!
-    instructor: Instructor
-    students: [Student!]
+    fullName: String!
+    number: String!
+    country: String
+    time: String
   }
 
   type Query {
-    getStudent(id: ID!): Student!
-    getStudents: [Student!]!
-    filterStudents(major: String!): [Student!]!
-
-    getInstructor(id: ID!): Instructor!
-    getInstructors: [Instructor!]!
-
-    getCourse(id: ID!): Course!
-    getCourses: [Course!]!
-    filterCourses(credits: Int!): [Course!]!
+    getContact(id: ID!): Contact!
+    getContacts: [Contact!]!
   }
 
   type Mutation {
-    addStudent(name: String!, email: String!, major: String!, year: Int!, courseIDs: [ID!]): Student!
-    updateStudent(id: ID!, name: String, email: String, major: String, year: Int, courseIDs: [ID!]): Student!
-    deleteStudent(id: ID!): Student!
-
-    addInstructor(name: String!, email: String!, officeHours: String!, courseIDs: [ID!]): Instructor!
-    updateInstructor(id: ID!, name: String, email: String, officeHours: String, courseIDs: [ID!]): Instructor!
-    deleteInstructor(id: ID!): Instructor!
-
-    addCourse(name: String!, credits: Int!, instructorID: ID, studentIDs: [ID!]): Course!
-    updateCourse(id: ID!, name: String, credits: Int, instructorID: ID, studentIDs: [ID!]): Course!
-    deleteCourse(id: ID!): Course!
+    addContact(fullName: String!, number: String!): Contact!
+    updateContact(id: ID!, fullName: String, number: String): Contact!
+    deleteContact(id: ID!): Boolean!
   }
 `;
 
