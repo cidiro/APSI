@@ -6,7 +6,7 @@ import typeDefs from "./typeDefs.ts";
 import resolvers from "./resolvers/index.ts";
 
 
-const MONGO_URL = "mongodb+srv://ropalop:ñplokmijn@cluster0.jraxv22.mongodb.net/gql-campus?retryWrites=true&w=majority";
+const MONGO_URL = Deno.env.get("MONGO_URL");
 
 if (!MONGO_URL) {
   console.log("No mongo URL found");
